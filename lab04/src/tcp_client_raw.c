@@ -8,7 +8,6 @@
 #include <sys/socket.h>
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
-#include <netinet/if_ether.h>
 
 #ifdef DEBUG
 	#define debug(fn) fn
@@ -53,9 +52,9 @@ unsigned short checksum(uint16_t *buf ,size_t len)
 		len -= 2;
 	}
 	if(len == 1){
-		unsigned short oddbyte = 0;
-		*((uint8_t *)&oddbyte)=*(uint8_t*)buf;
-		sum += oddbyte;
+		unsigned short temp = 0;
+		*((uint8_t *)&temp)=*(uint8_t*)buf;
+		sum += temp;
 		len -= 1;
 	}
 	sum = (sum & 0xffff) + (sum >> 16);
@@ -181,12 +180,12 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
+	// TCP Three-way Handshaking 
 	srand(time(NULL));
 	uint32_t seq_num = rand();
 	uint32_t ack_num = 0;
 	debug(printf("Initial seq_num : %u\n",seq_num));
 
-	// TCP Three-way Handshaking 
 	int tcp_type;
 	const size_t tcp_header_len = sizeof(struct tcphdr);
 	const size_t ip_header_len = sizeof(struct iphdr);
@@ -218,7 +217,7 @@ int main(int argc, char *argv[])
 	seq_num = ntohl(synack_tcp->ack_seq);
 	ack_num = ntohl(synack_tcp->seq)+1;
 
-	debug(printf("SYN-ACK length: %d\n",received));
+	debug(printf("SYN-ACK length: %d\n",received);)
 	debug(printf("SYN: %d\n",synack_tcp->syn);)
 	debug(printf("ACK: %d\n",synack_tcp->ack);)
 	debug(printf("SEQ_num: %u\n",ntohl(synack_tcp->seq));)
