@@ -31,7 +31,7 @@ typedef enum _TCP_TYPE{
 	DATA
 }TCP_TYPE;
 
-// TODO: pseudo header needed for tcp header checksum calculation
+// Pseudo header needed for tcp header checksum calculation
 struct pseudo_header
 {
 	uint32_t source_address;
@@ -41,7 +41,7 @@ struct pseudo_header
 	uint16_t tcp_length;
 };
 
-// TODO: Define checksum function which returns unsigned short value 
+// Define checksum function which returns unsigned short value 
 unsigned short checksum(uint16_t *buf ,size_t len)
 {
 	unsigned int sum = 0;
