@@ -46,17 +46,17 @@ void OutputMemoryStream::WriteBits(uint8_t outData, size_t outBitCount)
 
 		write_data = (outData & ~mask) >> first_seg_len;
 		*(mBuffer+resultHead) = write_data;
-		printf("write_data : %u\n",write_data);
+		// printf("write_data : %u\n",write_data);
 	}
 	else{
 		uint8_t write_data = (outData << mBitHead);
 		*(mBuffer+mHead) = ((*(mBuffer+mHead)) | write_data);
-		printf("write_data : %u\n",write_data);
+		// printf("write_data : %u\n",write_data);
 	}
-	printf("1st: %d\n",*(mBuffer+mHead));
+	// printf("1st: %d\n",*(mBuffer+mHead));
 	mBitHead = (uint8_t)resultBitHead;
 	mHead = resultHead;
-	printf("2nd: %d\n",*(mBuffer+mHead));
+	// printf("2nd: %d\n",*(mBuffer+mHead));
 }	
 
 void InputMemoryStream::Read(void* inData,
@@ -96,11 +96,11 @@ void InputMemoryStream::ReadBits(uint8_t& inData, size_t inBitCount)
 		uint8_t read_data = (*(mBuffer+mHead) & mask) >> mBitHead;
 		inData = read_data;
 	}
-	printf("resultBitHead: %d\n",resultBitHead);
-	printf("resultHead: %d\n",resultHead);
-	printf("1st: %d\n",*(mBuffer+mHead));
+	// printf("resultBitHead: %d\n",resultBitHead);
+	// printf("resultHead: %d\n",resultHead);
+	// printf("1st: %d\n",*(mBuffer+mHead));
 	mBitHead = (uint8_t)resultBitHead;
 	mHead = resultHead;
-	printf("2nd: %d\n",*(mBuffer+mHead));
-	printf("read_data : %u\n", inData);
+	// printf("2nd: %d\n",*(mBuffer+mHead));
+	// printf("read_data : %u\n", inData);
 }
