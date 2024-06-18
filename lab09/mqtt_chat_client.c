@@ -6,7 +6,7 @@
 
 #define MQTT_HOST 	"test.mosquitto.org"
 #define MQTT_PORT   1883
-#define MQTT_TOPIC  "chat"
+#define MQTT_TOPIC  "chat/yunseo"
 
 static void on_connect(struct mosquitto *mosq, void *obj, int rc)
 {
@@ -31,8 +31,8 @@ void publish_message(struct mosquitto *mosq, char *name)
 
 	fgets(payload,sizeof(payload),stdin);
 	char *data = (char *)malloc(strlen(payload)+strlen(name)+3);
-	snprintf(data,strlen(payload)+strlen(name)+3,"[%s] %s",name,payload);
-	rc = mosquitto_publish(mosq, NULL, "chat/yunseo", strlen(data), data, 2, false);
+	snprintf(data,strlen(payload)+strlen(name)+4,"[%s]: %s",name,payload);
+	rc = mosquitto_publish(mosq, NULL, MQTT_TOPIC, strlen(data), data, 2, false);
 	if(rc != MOSQ_ERR_SUCCESS){
 		fprintf(stderr, "Error publishing: %s\n", mosquitto_strerror(rc));
 	}
@@ -59,7 +59,7 @@ void *sub_topic(){
 		pthread_exit(NULL);
 	}
 
-	rc = mosquitto_subscribe(mosq, NULL, "chat/yunseo", 1);
+	rc = mosquitto_subscribe(mosq, NULL, MQTT_TOPIC, 1);
 	if(rc != MOSQ_ERR_SUCCESS){
 		fprintf(stderr, "Error subscribing: %s\n", mosquitto_strerror(rc));
 		/* We might as well disconnect if we were unable to subscribe */
