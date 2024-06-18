@@ -77,21 +77,22 @@ int main(int argc, char *argv[])
 				event.data.fd=clnt_sock;
 				epoll_ctl(epfd, EPOLL_CTL_ADD, clnt_sock, &event);
 				printf("connected client: %d \n", clnt_sock);
-				if(clnt_array[i].filename != NULL){
-					free(clnt_array[i].filename);
+				if(clnt_array[clnt_sock].filename != NULL){
+					free(clnt_array[clnt_sock].filename);
 				}
-				clnt_array[i].flag = 1;
+				clnt_array[clnt_sock].flag = 1;
 			}
 			else
 			{
-				if(clnt_array[i].flag){
-					read(ep_events[i].data.fd, &clnt_array[i].filename_len, sizeof(int));
-					printf("filename len: %d\n",clnt_array[i].filename_len);
-					clnt_array[i].filename = (char *)malloc(clnt_array[i].filename_len);
-					read(ep_events[i].data.fd, clnt_array[i].filename, clnt_array[i].filename_len);
-					printf("filename: %s\n",clnt_array[i].filename);
-					clnt_array[i].fp = fopen(clnt_array[i].filename,"wb");
-					clnt_array[i].flag = 0;
+        int index = ep_events[i].data.fd;
+				if(clnt_array[index].flag){
+					read(ep_events[i].data.fd, &clnt_array[index].filename_len, sizeof(int));
+					printf("filename len: %d\n",clnt_array[index].filename_len);
+					clnt_array[index].filename = (char *)malloc(clnt_array[index].filename_len);
+					read(ep_events[i].data.fd, clnt_array[index].filename, clnt_array[index].filename_len);
+					printf("filename: %s\n",clnt_array[index].filename);
+					clnt_array[index].fp = fopen(clnt_array[index].filename,"wb");
+					clnt_array[index].flag = 0;
 				}
 				else{
 					str_len=read(ep_events[i].data.fd, buf, BUF_SIZE);
@@ -100,13 +101,13 @@ int main(int argc, char *argv[])
 						epoll_ctl(epfd, EPOLL_CTL_DEL, ep_events[i].data.fd, NULL);
 						close(ep_events[i].data.fd);
 						printf("closed client: %d\n", ep_events[i].data.fd);
-						fclose(clnt_array[i].fp);
-						free(clnt_array[i].filename);
-						memset(&clnt_array[i],0,sizeof(struct clntfile));
+						fclose(clnt_array[index].fp);
+						free(clnt_array[index].filename);
+						memset(&clnt_array[index],0,sizeof(struct clntfile));
 					}
 					else
 					{
-						fwrite(buf, 1, str_len, clnt_array[i].fp);
+						fwrite(buf, 1, str_len, clnt_array[index].fp);
 					}
 				}
 			}
